@@ -1,0 +1,85 @@
+<div class="row mb-5 mt-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <h3>Fazendas
+                        <button class="btn btn-primary float-end" routerLink="/fazenda/cadastrar">Adicionar
+                            Fazenda</button>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 col-sm-12 mb-3" *ngFor="let fazenda of fazendas;let i = index">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <h4 class="col-12 card-title">{{fazenda?.nome}}</h4>
+                    <p class="col-12">Total de Talhões: {{fazenda?.talhoes.length}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-sm btn-primary w-100 mr-3"
+                                [routerLink]="['/fazenda/editar', i]">Atualizar
+                            </button>
+                            <button class="btn btn-sm btn-primary w-100"
+                                [routerLink]="['/fazenda/visualizar', i]">Visualizar
+                            </button>
+                        </div>
+                        <button class="btn btn-sm btn-success"
+                            (click)="openProdutividade(modalProdutividade, i)">Calcular
+                            Produtividade</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalProdutividade>
+    <div class="modal-header">
+        <h4 class="modal-title">Produtividade - {{fazenda.nome}}
+        </h4>
+        <span title="Sair" role='button' class="material-icons float-end" (click)="closeModal()">
+            close
+        </span>
+    </div>
+    <div class="modal-body">
+        <p>Produtividade Total: <strong>{{getProdutividadeTotal()}}</strong></p>
+        <p>Produtividade Média: <strong>{{getProdutividadeMedia()}}</strong></p>
+
+        <app-form-input [label]="'Peso médio de grãos em uma vagem (gramas):'" [control]="form.get('pesoVagem')"
+            [tipo]="tipoInput.DECIMAL">
+        </app-form-input>
+        <app-form-input [label]="'Plantas existentes em 4 m²:'" [control]="form.get('plantasMetros')"
+            [tipo]="tipoInput.NUMERO"></app-form-input>
+        <app-form-input [label]="'Média de vagens por planta:'" [control]="form.get('vagemPlata')"
+            [tipo]="tipoInput.NUMERO"></app-form-input>
+
+        <p>Produtividade Total Estimada: <strong *ngIf="fazenda.estimativa">{{fazenda.estimativa}} KG</strong></p>
+
+        <table class="table table-bordered mt-2" *ngIf="fazenda.talhoes">
+            <thead>
+                <tr>
+                    <th>Área (m<sup>2</sup>)</th>
+                    <th>Média Produtividade</th>
+                    <th>Produtividade Estimada (KG)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let talhao of fazenda.talhoes">
+                    <td>{{talhao.area}}</td>
+                    <td>{{getProdutividadeTalhao(talhao)}}</td>
+                    <td>{{talhao.estimativa}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-success" (click)="estimarProdutividadeFazenda()">Estimar
+                Produtividade da Fazenda</button>
+        </div>
+    </div>
+</ng-template>

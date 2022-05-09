@@ -1,0 +1,24 @@
+<div class="form-group" [ngSwitch]="tipo">
+    <label class="col-form-label">{{label}}</label>
+    <input *ngSwitchCase="tipoInput.PADRAO" maxlength="{{maxLength}}" minlength="{{minLength}}"
+        [class.campoErrado]="control.invalid && control.touched" class="form-control" [formControl]="control">
+    <input *ngSwitchCase="tipoInput.DATA" type="date" [formControl]="control" class="form-control"
+        [class.campoErrado]="control.invalid && control.touched">
+    <input *ngSwitchCase="tipoInput.TELEFONE" mask="(00) 0000-0000||(00) 0 0000-0000"
+        [class.campoErrado]="control.invalid && control.touched" class="form-control" [formControl]="control">
+
+    <div *ngSwitchCase="tipoInput.PDF" class="input-group mb-3">
+        <input class="form-control" [class.campoErrado]="control.invalid && control.touched" [formControl]="control"
+            type="file"
+            accept="application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            id="file">
+    </div>
+
+    <input *ngSwitchCase="tipoInput.NUMERO" mask="0*" [class.campoErrado]="control.invalid && control.touched"
+        class="form-control" [formControl]="control">
+
+    <input *ngSwitchCase="tipoInput.DECIMAL" [dropSpecialCharacters]="false" mask="0*.00"
+        [class.campoErrado]="control.invalid && control.touched" class="form-control" [formControl]="control">
+</div>
+
+<app-control-messages [control]="control"></app-control-messages>

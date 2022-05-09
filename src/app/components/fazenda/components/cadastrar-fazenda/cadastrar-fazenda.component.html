@@ -1,0 +1,91 @@
+<div class="card mt-4 mb-4">
+    <div class="card-body">
+        <app-form-input [label]="'Nome da Fazenda:'" [control]="form.get('nome')" [tipo]="tipoInput.PADRAO">
+        </app-form-input>
+
+        <div class="mt-5" *ngIf="!disable">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-primary mb-2" (click)="adicionarTalhao(modalTalhao)">Adicionar
+                    Talhão</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-sm-12" *ngFor="let item of form.get('talhoes')?.value; let i = index">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div *ngIf="!disable">
+                    <button class="btn btn-sm mb-4 btn-primary float-start"
+                        (click)="adicionarProdutividade(modalProdutividade, i)">Adicionar
+                        Produtividade
+                    </button>
+                    <span title="Remover" role='button' class="material-icons red float-end mb-4"
+                        (click)="removerTalhao(i)">
+                        close
+                    </span>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Número do Talhão</th>
+                            <th>Área (m<sup>2</sup>)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.area}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="3">
+                                Produtividade
+                            </th>
+                        </tr>
+                        <tr *ngFor="let produt of item.produtividade;let j = index">
+                            <td colspan="3">
+                                {{produt}}
+                                <span title="Remover" *ngIf="!disable" role='button'
+                                    class="material-icons red float-end" (click)="removerProdutividade(i, j)">
+                                    close
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card" *ngIf="!disable">
+    <div class="card-footer d-flex justify-content-end">
+        <button class="btn btn-sm btn-primary" (click)="cadastrar()">Salvar</button>
+    </div>
+</div>
+
+<ng-template #modalTalhao>
+    <div class="modal-header">
+        <h4 class="modal-title">Adicionar Talhão</h4>
+    </div>
+    <div class="modal-body">
+        <app-form-input [label]="'Área (m²):'" [control]="talhao.get('area')" [tipo]="tipoInput.NUMERO">
+        </app-form-input>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" (click)="salvarTalhao()">Salvar</button>
+    </div>
+</ng-template>
+
+<ng-template #modalProdutividade>
+    <div class="modal-header">
+        <h4 class="modal-title">Adicionar Produtividade</h4>
+    </div>
+    <div class="modal-body">
+        <app-form-input [label]="'Produtividade:'" [control]="formProdutividade" [tipo]="tipoInput.NUMERO">
+        </app-form-input>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" (click)="salvarProdutividade()">Salvar</button>
+    </div>
+</ng-template>
